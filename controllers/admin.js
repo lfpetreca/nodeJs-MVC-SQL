@@ -17,7 +17,10 @@ exports.postAddProduct = (req, res, next) => {
         req.body.price
     )
     product.save()
-    res.redirect('/')
+        .then(() => {
+            res.redirect('/')
+        })
+        .catch(err => console.error(err))
 }
 
 exports.getEditProduct = (req, res, next) => {
@@ -43,7 +46,7 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProduct = (req, res, next) => {
     const prodId = req.body.productId
-    
+
     const updateProduct = new Product(
         prodId,
         req.body.title,
