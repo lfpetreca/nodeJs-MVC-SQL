@@ -9,16 +9,15 @@ exports.getAddProduct = (req, res, next) => {
 }
 
 exports.postAddProduct = (req, res, next) => {
-    const product = new Product(
-        null,
-        req.body.title,
-        req.body.imageUrl,
-        req.body.description,
-        req.body.price
-    )
-    product.save()
-        .then(() => {
-            res.redirect('/')
+    Product.create({
+        title: req.body.title,
+        price: req.body.price,
+        imageUrl: req.body.imageUrl,
+        description: req.body.description
+    })
+        .then(result => {
+            console.log('Create ')
+            //res.redirect('/')
         })
         .catch(err => console.error(err))
 }
@@ -59,13 +58,15 @@ exports.postEditProduct = (req, res, next) => {
 }
 
 exports.getProducts = (req, res, next) => {
-    Product.fetchAll(product => {
-        res.render('admin/products', {
-            prods: product,
-            pageTitle: 'Admin Products',
-            path: '/admin/products'
+    Product.findAll()
+        .then(product => {
+            res.render('admin/products', {
+                prods: product,
+                pageTitle: 'Admin Products',
+                path: '/admin/products'
+            })
         })
-    })
+        .catch(err => console.err(err))
 }
 
 exports.postDeleteProduct = (req, res, next) => {
